@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIlthy BillClear</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>AIlthy BillClear</h1>
+  <p>Paste a medical bill snippet below to receive a simplified explanation.</p>
+
+  <form id="billForm" novalidate>
+    <textarea id="billInput" rows="10" required placeholder="Paste your bill here..."></textarea>
+  
+    <label for="emailInput">Stay updated? Enter your e-mail (optional):</label>
+    <input id="emailInput" type="email" placeholder="you@example.com"/>
+  
+    <input id="phoneInput" type="tel" placeholder="Phone (optional)"/>
+  
+    <button type="submit">Simplify</button>
+  </form>
+
+  <div id="outputContainer">
+    <h3>Simplified Bill Explanation:</h3>
+    <div id="outputText"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="/static/script.js"></script>
+</body>
+</html>

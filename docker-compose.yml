@@ -1,0 +1,28 @@
+services:
+  api:
+    container_name: api
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports: 
+      - "8000:8000"
+    restart: unless-stopped
+
+  db:
+    container_name: db
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: billclear
+      POSTGRES_USER: billclear
+      POSTGRES_PASSWORD: billclear
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
