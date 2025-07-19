@@ -1,2 +1,10 @@
 isort
 black
+
+pytest           # de‑facto Python test runner
+pytest-asyncio   # awaitable tests for FastAPI endpoints
+aiosqlite        # async SQLite driver
+greenlet         # async<->sync bridge
+python-multipart # multipart/form-data support
+# pytest-cov       # coverage report, no config needed
+faker            # easy dummy data

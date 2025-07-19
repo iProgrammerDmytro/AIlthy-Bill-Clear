@@ -15,24 +15,21 @@ class ContactService:
         • Inserts a new contact.
         • If the e-mail already exists, updates phone **only if the caller sent one**.
           (Otherwise keeps the existing phone.)
-        • Always returns the contact row in one round‑trip.
+        • Always returns the contact row in one round-trip.
         """
-        
+
         insert = pg_insert(Contact).values(**data.model_dump())
-        
+
         # phone := COALESCE(EXCLUDED.phone, contacts.phone)
-        stmt = (
-            insert.on_conflict_do_update(
-                index_elements=[Contact.email],
-                set_={
-                    "phone": func.coalesce(
-                        insert.excluded.phone,  # the new value (may be NULL)
-                        Contact.phone,          # the existing value
-                    )
-                }
-            )
-            .returning(Contact)
-        )
+        stmt = insert.on_conflict_do_update(
+            index_elements=[Contact.email],
+            set_={
+                "phone": func.coalesce(
+                    insert.excluded.phone,  # the new value (may be NULL)
+                    Contact.phone,  # the existing value
+                )
+            },
+        ).returning(Contact)
 
         result = await db.execute(stmt)
         await db.commit()

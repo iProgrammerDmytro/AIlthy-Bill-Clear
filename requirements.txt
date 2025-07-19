@@ -13,4 +13,3 @@ psycopg2-binary==2.*
 
 jinja2==3.*               # template engine for index.html
 httpx==0.27.*             # async http if you need external calls
-pytest==8.*               # tests
