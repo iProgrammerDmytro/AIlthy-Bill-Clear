@@ -1,33 +1,139 @@
-body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 600px;
-  margin: auto;
-  background: #f7f9fc;
+:root {
+  --brand: #1379ec; /* calm healthcare blue  */
+  --brand-dark: #0e5fb8;
+  --bg: #f7f9fc;
+  --text: #1f2937;
+  --radius: 8px;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
-textarea {
+/* -------- Layout -------- */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 2rem;
+  background: var(--bg);
+  font: 400 1rem/1.6 "Inter", Arial, sans-serif;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
+  max-width: 640px;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin: auto;
+  box-shadow: var(--shadow);
+}
+
+/* -------- Typography -------- */
+h1 {
+  font-size: 1.75rem;
+  margin: 0.25rem 0 1rem;
+}
+h1 span {
+  color: var(--brand);
+}
+h2 {
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.5rem;
+}
+.tagline {
+  margin: -0.5rem 0 1.5rem;
+  color: #475569;
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* -------- Form elements -------- */
+textarea,
+input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  font: inherit;
+}
+textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.field-group {
+  margin-top: 1rem;
+}
+label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+.required {
+  color: var(--brand);
 }
 
 button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
+  margin-top: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease-in-out;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+button:not(:disabled):hover {
+  background: var(--brand-dark);
 }
 
 #outputContainer {
-  margin-top: 20px;
-  background: #fff;
-  padding: 15px;
-  border-radius: 6px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+#outputText {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-#outputText {
-  white-space: pre-wrap; /* keep line breaks, allow wrapping */
-  word-wrap: break-word; /* long words won’t overflow */
-  overflow-x: auto; /* horizontal scroll if still too wide */
+/* -------- Footer -------- */
+footer {
+  margin: 2rem auto 0.5rem;
+  text-align: center;
+  color: #64748b;
+}
+footer a {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+/* -------- NProgress override (thin brand bar) -------- */
+#nprogress .bar {
+  background: var(--brand);
+}
+#nprogress .spinner {
+  display: none;
 }

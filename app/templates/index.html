@@ -1,32 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>AIlthy BillClear</title>
+
+  <!-- Type & icons -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Progress bar -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css">
+
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>AIlthy BillClear</h1>
-  <p>Paste a medical bill snippet below to receive a simplified explanation.</p>
+  <main class="card" role="main">
+    <header>
+      <h1 class="brand">AIlthy <span>BillClear</span></h1>
+      <p class="tagline">AI-powered explanations for confusing medical bills.</p>
+    </header>
 
-  <form id="billForm" novalidate>
-    <textarea id="billInput" rows="10" required placeholder="Paste your bill here..."></textarea>
-  
-    <label for="emailInput">Stay updated? Enter your e-mail (optional):</label>
-    <input id="emailInput" type="email" placeholder="you@example.com"/>
-  
-    <input id="phoneInput" type="tel" placeholder="Phone (optional)"/>
-  
-    <button type="submit">Simplify</button>
-  </form>
+    <form id="billForm" novalidate>
+      <label class="visually-hidden" for="billInput">Medical bill text</label>
+      <textarea id="billInput" rows="10" required placeholder="Paste your bill snippet here…"></textarea>
 
-  <div id="outputContainer">
-    <h3>Simplified Bill Explanation:</h3>
-    <div id="outputText"></div>
-  </div>
+      <div class="field-group">
+        <label for="emailInput">E-mail <span class="required">*</span></label>
+        <input id="emailInput" type="email" required placeholder="you@example.com"/>
+      </div>
+
+      <div class="field-group">
+        <label for="phoneInput">Phone <small>(optional)</small></label>
+        <input id="phoneInput" type="tel" placeholder="+1 555 123 4567"/>
+      </div>
+
+      <button id="submitBtn" type="submit">
+        <span class="btn-label">Simplify my bill</span>
+      </button>
+    </form>
+
+    <section id="outputContainer" hidden>
+      <h2>Explanation</h2>
+      <div id="outputText"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>© 2025 AIlthy Health Inc.  |  All rights reserved.</small>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="/static/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+  <script src="/static/script.js" defer></script>
 </body>
 </html>

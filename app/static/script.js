@@ -2,63 +2,56 @@ const form = document.getElementById("billForm");
 const billInput = document.getElementById("billInput");
 const emailInput = document.getElementById("emailInput");
 const phoneInput = document.getElementById("phoneInput");
-const outputText = document.getElementById("outputText");
+const output = document.getElementById("outputText");
+const outputBox = document.getElementById("outputContainer");
+const submitBtn = document.getElementById("submitBtn");
 
 let busy = false;
 
-form.addEventListener("submit", async (evt) => {
-  evt.preventDefault();
-  if (busy) return;
-  busy = true;
-  outputText.textContent = "Processing…";
-
-  const billText = billInput.value.trim();
-  if (!billText) {
-    outputText.textContent = "Please paste a bill snippet first.";
-    busy = false;
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!form.checkValidity()) {
+    form.reportValidity();
     return;
   }
+  if (busy) return;
+  busy = true;
 
-  /* helper that throws if fetch != 2xx ------------------------------ */
-  const fetchJson = async (url, payload) => {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) {
-      const errMsg = await res.text();
-      throw new Error(errMsg || `HTTP ${res.status}`);
-    }
-    return res.json();
-  };
+  /* 🔄 UI state */
+  NProgress.start();
+  submitBtn.disabled = true;
+  submitBtn.querySelector(".btn-label").textContent = "Working…";
 
-  /* ⏱️ run both requests in parallel ------------------------------- */
+  try {
+    const [contactRes, simplifyRes] = await Promise.all([
+      postJSON("/api/contact/subscribe", {
+        email: emailInput.value.trim(),
+        phone: phoneInput.value.trim() || null,
+      }),
+      postJSON("/api/bill/simplify", { text: billInput.value.trim() }),
+    ]);
 
-  const subscribe = (async () => {
-    const email = emailInput.value.trim();
-    if (!email) return "skipped";
-    const phone = phoneInput.value.trim() || null;
-    return fetchJson("/api/contact/subscribe", { email, phone });
-  })();
-
-  const simplify = fetchJson("/api/bill/simplify", { text: billText });
-
-  const [contactRes, simpRes] = await Promise.allSettled([subscribe, simplify]);
-
-  /* update UI ------------------------------------------------------- */
-
-  if (simpRes.status === "fulfilled") {
-    outputText.innerHTML = marked.parse(simpRes.value.result);
-  } else {
-    outputText.textContent =
-      simpRes.reason?.message || "Could not simplify bill.";
+    /* 🎯 Display result */
+    output.innerHTML = marked.parse(simplifyRes.result);
+    outputBox.hidden = false;
+  } catch (err) {
+    outputBox.hidden = false;
+    output.textContent = err.message || "Something went wrong.";
+  } finally {
+    NProgress.done();
+    submitBtn.disabled = false;
+    submitBtn.querySelector(".btn-label").textContent = "Simplify my bill";
+    busy = false;
   }
-
-  if (contactRes.status === "rejected") {
-    console.warn("Contact capture failed:", contactRes.reason);
-    // optional toast/snackbar here
-  }
-
-  busy = false;
 });
+
+/* Helper */
+async function postJSON(url, payload) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error((await res.text()) || `HTTP ${res.status}`);
+  return res.json();
+}
